@@ -2,19 +2,39 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  };
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
     // Integration point: Call your Express API here (e.g., /api/auth/login)
-    console.log("Attempting login with:", loginData);
+    console.log("sUBMITTED");
+
+    const userData = {
+      email,
+      password
+    };
+    console.log("Sending this data to backend: ", userData);
+
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Login successful!");
+  
+      } else {
+        alert(data.message || "Login failed");
+      } 
+    } catch (error) {
+      console.error("Error logging in:", error);
+    } 
+
   };
 
   return (
@@ -35,9 +55,10 @@ const Login = () => {
               type="email"
               name="email"
               required
+              value={email}
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder:text-slate-300"
               placeholder="email@example.com"
-              onChange={handleChange}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -54,7 +75,8 @@ const Login = () => {
               required
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder:text-slate-300"
               placeholder="••••••••"
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

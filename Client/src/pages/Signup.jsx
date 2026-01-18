@@ -2,25 +2,32 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitted");
+
+    const userData = {
+      username: username,
+      email: email,
+      password: password,
+    };
+
+    console.log("Sending this data to backend: ", userData);
     
     try {
       // Replace with your actual Express API URL
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch('http://localhost:3000/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(userData),
       });
 
       const data = await response.json();
@@ -54,9 +61,10 @@ const Signup = () => {
               type="text"
               name="username"
               required
+              value={username}
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
               placeholder="Your name"
-              onChange={handleChange}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
 
@@ -68,7 +76,8 @@ const Signup = () => {
               required
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
               placeholder="email@example.com"
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -80,7 +89,8 @@ const Signup = () => {
               required
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
               placeholder="••••••••"
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

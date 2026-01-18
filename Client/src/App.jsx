@@ -5,6 +5,7 @@ import Footer from "./components/footer";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import AiAsk from "./pages/AiAsk";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<AiAsk />} />
     </Routes>
     <Footer />
     </BrowserRouter>
