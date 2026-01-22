@@ -13,8 +13,8 @@ const Login = () => {
     console.log("sUBMITTED");
 
     const userData = {
-      email,
-      password
+      email: email,
+      password: password
     };
     console.log("Sending this data to backend: ", userData);
 

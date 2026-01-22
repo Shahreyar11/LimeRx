@@ -1,4 +1,7 @@
 const USER = require('../models/user');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 async function handleSignUp(req, res){
     try{
@@ -9,15 +12,20 @@ async function handleSignUp(req, res){
         if (userExists) {
         return res.status(400).json({ message: 'User already exists' });
         }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = await USER.create({
             username: username,
             email: email,
-            password: password,
+            password: hashedPassword,
         });
+
+        const token = jwt.sign({email: email}, process.env.SECRET_KEY );
+        res.cookie("token", token, {httpOnly: true, secure: false});
         res.status(201).json({
             message: 'User Created Successfully',
-            user: newUser,
+            data: {email: newUser.email, token: token}
         });
     }
     catch(error){
