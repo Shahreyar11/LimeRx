@@ -2,15 +2,21 @@ const USER = require('../models/user');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const express = require("express");
+const Groq = require("groq-sdk");
 
-async function handleSignUp(req, res){
-    try{
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+});
+
+async function handleSignUp(req, res) {
+    try {
         console.log('Data received on backend: ', req.body);
-        const {username, email, password } = req.body;
+        const { username, email, password } = req.body;
 
         const userExists = await USER.findOne({ email });
         if (userExists) {
-        return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({ message: 'User already exists' });
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -21,39 +27,67 @@ async function handleSignUp(req, res){
             password: hashedPassword,
         });
 
-        const token = jwt.sign({email: email}, process.env.SECRET_KEY );
-        res.cookie("token", token, {httpOnly: true, secure: false});
+        const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
+        res.cookie("token", token, { httpOnly: true, secure: false });
         res.status(201).json({
             message: 'User Created Successfully',
-            data: {email: newUser.email, token: token}
+            data: { email: newUser.email, token: token }
         });
     }
-    catch(error){
-        res.status(500).json({message: 'Error Creating User', error: error.message})
+    catch (error) {
+        res.status(500).json({ message: 'Error Creating User', error: error.message })
     }
 };
 
-async function handleLogin(req, res){
-    try{
-        const{ email, password } = req.body;
+async function handleLogin(req, res) {
+    try {
+        const { email, password } = req.body;
         const user = await USER.findOne({ email })
         console.log(user.email, user.password)
-        if(user) {
-            if(user && user.password === password){
-                res.status(201).json({message: "User Logged in", user})
+        if (user) {
+            if (user && user.password === password) {
+                res.status(201).json({ message: "User Logged in", user })
                 console.log("User Password Correct");
             }
         }
-        else{
+        else {
             res.status(400).json({ error: "Some Error Occured" });
         }
     }
-    catch(error) {
-        res.status(500).json({message: "Error Login"})
+    catch (error) {
+        res.status(500).json({ message: "Error Login" })
+    }
+}
+
+async function handleAiChat(req, res) {
+    try {
+        const { message } = req.body;
+
+        const response = await groq.chat.completions.create({
+            model: "llama3-70b-8192", // best for now
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a helpful health assistant. Give safe, general advice only.",
+                },
+                {
+                    role: "user",
+                    content: message,
+                },
+            ],
+        });
+
+        res.json({
+            reply: response.choices[0].message.content,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Something went wrong" });
     }
 }
 
 module.exports = {
     handleSignUp,
-    handleLogin
+    handleLogin,
+    handleAiChat
 };
