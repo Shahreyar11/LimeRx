@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const express = require("express");
 const Groq = require("groq-sdk");
+const cookieParser = require("cookie-parser")
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
@@ -28,10 +29,25 @@ async function handleSignUp(req, res) {
         });
 
         const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
-        res.cookie("token", token, { httpOnly: true, secure: false });
+        console.log(token)
+
+        //         1. res.cookie()
+        // res = response object (server → client)
+        // .cookie() = method to set a cookie in the user's browser
+
+        // 👉 So this line is basically saying:
+
+        // "Hey browser, store this data for me."
+
+        res.cookie("token", token, { httpOnly: true, secure: false, sameSite:"lax" });
+
+        //         ✅ httpOnly: true
+        // Cookie cannot be accessed using JavaScript (like document.cookie)
+        // Only accessible by the server
+
         res.status(201).json({
             message: 'User Created Successfully',
-            data: { email: newUser.email, token: token }
+            data: { email: newUser.email }
         });
     }
     catch (error) {
@@ -44,14 +60,36 @@ async function handleLogin(req, res) {
         const { email, password } = req.body;
         const user = await USER.findOne({ email })
         console.log(user.email, user.password)
-        if (user) {
-            if (user && user.password === password) {
-                res.status(201).json({ message: "User Logged in", user })
-                console.log("User Password Correct");
-            }
+        if (!user) {
+            return res.status(400).json({ status: false, message: "User not found" })
         }
         else {
-            res.status(400).json({ error: "Some Error Occured" });
+            // res.status(400).json({ error: "Some Error Occured" });
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                return res.status(400).json({ status: false, message: "Invalid credentials" });
+            }
+            const token = jwt.sign({ email: email }, process.env.SECRET_KEY, { expiresIn: "7d" });
+            console.log(token)
+
+            res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax" });
+
+
+            res.status(201).json({
+                message: 'User LoggedIn Successfully',
+                data: { email: email }
+            });
+
+
+
+            // compares the password from mongoDB        
+            // 1. res.cookie()
+            // res = response object (server → client)
+            // .cookie() = method to set a cookie in the user's browser
+
+            // 👉 So this line is basically saying:
+
+            // "Hey browser, store this data for me."
         }
     }
     catch (error) {
