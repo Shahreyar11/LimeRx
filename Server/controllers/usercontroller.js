@@ -97,6 +97,15 @@ async function handleLogin(req, res) {
     }
 }
 
+async function handlePersonalization(req, res){
+    try{
+
+    }
+    catch{
+
+    }
+}
+
 async function handleAiChat(req, res) {
     try {
         const { message } = req.body;
@@ -127,5 +136,6 @@ async function handleAiChat(req, res) {
 module.exports = {
     handleSignUp,
     handleLogin,
-    handleAiChat
+    handleAiChat,
+    handlePersonalization
 };
