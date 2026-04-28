@@ -1,3 +1,16 @@
 
-*Gen_ai model 
+node_modules
+.env
+.DS_Store
 
+
+
+node_modules
+.env
+node_modules
+.env
+.DS_Store
+*PYTHON
+Gen_ai_model
+*AI_LOGS
+*models
