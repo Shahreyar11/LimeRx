@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AiAsk from "./pages/AiAsk";
+import Personalization from "./pages/Personalize";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/personalize" element={<Personalization/>} />
         <Route path="*" element={<AiAsk />} />
     </Routes>
     <Footer />

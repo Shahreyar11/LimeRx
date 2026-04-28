@@ -1,4 +1,16 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "shahreyar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -12,5 +24,6 @@
     "mongoose": "^8.21.0",
     "nanoid": "^5.1.6",
     "path": "^0.12.7"
-  }
+  },
+  "devDependencies": {}
 }

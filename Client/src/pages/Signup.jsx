@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { BrowserRouter, Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -9,6 +9,7 @@ const Signup = () => {
   // const handleChange = (e) => {
   //   setFormData({ ...formData, [e.target.name]: e.target.value });
   // };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +29,7 @@ const Signup = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
+        credentials: "include"
       });
 
       const data = await response.json();
@@ -35,6 +37,7 @@ const Signup = () => {
       if (response.ok) {
         alert("Account created successfully!");
         // You would typically redirect to login or dashboard here
+        navigate("/personalize")
       } else {
         alert(data.message || "Something went wrong");
       }
