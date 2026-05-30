@@ -3,12 +3,8 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const express = require("express");
-const Groq = require("groq-sdk");
 const cookieParser = require("cookie-parser")
 
-const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY,
-});
 
 async function handleSignUp(req, res) {
     try {
