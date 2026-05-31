@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/personalize" element={<Personalization/>} />
-        <Route path="*" element={<AiAsk />} />
+        <Route path="/ai-ask" element={<AiAsk />} />
     </Routes>
     <Footer />
     </BrowserRouter>
