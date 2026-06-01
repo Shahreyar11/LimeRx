@@ -37,7 +37,8 @@ const Signup = () => {
       if (response.ok) {
         alert("Account created successfully!");
         // You would typically redirect to login or dashboard here
-        navigate("/personalize")
+        navigate("/dashboard");
+        window.location.reload();
       } else {
         alert(data.message || "Something went wrong");
       }

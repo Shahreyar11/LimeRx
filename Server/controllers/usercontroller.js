@@ -96,11 +96,31 @@ async function handleLogin(req, res) {
 
 async function getCurrentUser(req,res){
 
-    const user = await USER.findOne({
-        email:req.user.email
-    });
+    try{
 
-    res.json(user);
+        const user = await USER.findOne({
+            email:req.user.email
+        });
+
+        if(!user){
+            return res.status(404).json({
+                message:"User not found"
+            });
+        }
+
+        return res.status(200).json({
+            username:user.username,
+            email:user.email
+        });
+
+    }
+    catch(error){
+
+        return res.status(500).json({
+            message:"Server Error"
+        });
+
+    }
 }
 
 
