@@ -3,12 +3,8 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const express = require("express");
-const Groq = require("groq-sdk");
 const cookieParser = require("cookie-parser")
 
-const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY,
-});
 
 async function handleSignUp(req, res) {
     try {
@@ -97,6 +93,54 @@ async function handleLogin(req, res) {
     }
 }
 
+
+async function getCurrentUser(req,res){
+
+    try{
+
+        const user = await USER.findOne({
+            email:req.user.email
+        });
+
+        if(!user){
+            return res.status(404).json({
+                message:"User not found"
+            });
+        }
+
+        return res.status(200).json({
+            username:user.username,
+            email:user.email
+        });
+
+    }
+    catch(error){
+
+        return res.status(500).json({
+            message:"Server Error"
+        });
+
+    }
+}
+
+
+
+// Clearcookie is a synchronous function
+function handleLogout(req, res) {
+    try {
+        res.clearCookie("token");
+
+        return res.status(200).json({
+            message: "Logged out successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Logout failed"
+        });
+    }
+}
+
+
 async function handlePersonalization(req, res){
     try{
 
@@ -137,5 +181,7 @@ module.exports = {
     handleSignUp,
     handleLogin,
     handleAiChat,
-    handlePersonalization
+    handlePersonalization,
+    handleLogout,
+    getCurrentUser
 };
