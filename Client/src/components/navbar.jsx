@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-
-  const navigate = useNavigate();
+  
+  const navigate = useNavigate()
 
   useEffect(() => {
 
@@ -106,7 +105,7 @@ const Navbar = () => {
         <div className="flex items-center gap-6 font-medium">
 
           <Link
-            to="/ai-ask"
+            to="/ask"
             className="bg-purple-600 text-white px-5 py-2 rounded-full hover:bg-purple-700 transition-all shadow-md active:scale-95 flex items-center gap-2"
           >
             <span className="w-2 h-2 bg-pink-400 rounded-full animate-pulse"></span>

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   MessageCircle,
   Clock3,
@@ -12,7 +14,7 @@ import {
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -136,7 +138,7 @@ const Dashboard = () => {
 
             </p>
 
-            <button className="mt-10 flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:scale-105 transition">
+            <button className="mt-10 flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:scale-105 transition" onClick={() => navigate("/ask")}>
 
               <MessageCircle />
 

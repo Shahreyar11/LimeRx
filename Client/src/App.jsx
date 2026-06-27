@@ -5,7 +5,7 @@ import Footer from "./components/footer";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import AiAsk from "./pages/AiAsk";
+import AskAI from "./pages/AiAsk";
 import Personalization from "./pages/Personalize";
 import Dashboard from "./pages/Dashboard";
 
@@ -20,7 +20,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/personalize" element={<Personalization/>} />
 
-        <Route path="/ai-ask" element={<AiAsk />} />
+        <Route path="/ask" element={<AskAI/>} />
     </Routes>
     <Footer />
     </BrowserRouter>
